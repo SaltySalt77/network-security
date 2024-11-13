@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  target-server:
+    image: nginx:latest
+    container_name: target-server
+    networks:
+      - isolated_ddos_net
+    ports:
+      - "8080:80"
+
+  attacker1:
+    build: .
+    container_name: attacker1
+    networks:
+      - isolated_ddos_net
+
+  attacker2:
+    build: .
+    container_name: attacker2
+    networks:
+      - isolated_ddos_net
+
+  attacker3:
+    build: .
+    container_name: attacker3
+    networks:
+      - isolated_ddos_net
+
+  monitor:
+    build: .
+    container_name: monitor
+    networks:
+      - isolated_ddos_net
+    ports:
+      - "9000:9000" 
+
+networks:
+  isolated_ddos_net:
+    driver: bridge
