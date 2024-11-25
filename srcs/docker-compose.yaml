@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   target-server:
@@ -33,7 +33,10 @@ services:
     networks:
       - isolated_ddos_net
     ports:
-      - "9000:9000" 
+      - "9000:9000"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
 
 networks:
   isolated_ddos_net:
