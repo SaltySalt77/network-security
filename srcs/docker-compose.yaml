@@ -2,7 +2,8 @@ version: "3.8"
 
 services:
   target-server:
-    image: nginx:latest
+    build:
+      context: ./target-server
     container_name: target-server
     networks:
       isolated_ddos_net:
@@ -10,9 +11,9 @@ services:
     ports:
       - "8080:80"
     entrypoint: >
-      sh -c "ip route del default &&
+      sh -c "ip route del default || true &&
              ip route add default via 192.168.1.5 &&
-             nginx -g 'daemon off;'"
+             exec nginx -g 'daemon off;'"
 
   attacker1:
     build:
