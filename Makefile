@@ -10,7 +10,7 @@ fclean :
 	docker-compose $(FILE) down -v
 
 cache :
-	@${MAKE} clean
+	@${MAKE} clean -y
 	docker system prune -a
 re :
 	@${MAKE} clean
