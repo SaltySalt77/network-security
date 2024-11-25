@@ -9,6 +9,10 @@ services:
         ipv4_address: 192.168.1.10
     ports:
       - "8080:80"
+    entrypoint: >
+      sh -c "ip route del default &&
+             ip route add default via 192.168.1.5 &&
+             nginx -g 'daemon off;'"
 
   attacker1:
     build:
@@ -50,6 +54,11 @@ services:
     cap_add:
       - NET_ADMIN
     privileged: true
+    command: >
+      sh -c "iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination 192.168.1.10 &&
+             iptables -t nat -A POSTROUTING -j MASQUERADE &&
+             echo 1 > /proc/sys/net/ipv4/ip_forward &&
+             sleep infinity"
 
 networks:
   isolated_ddos_net:
