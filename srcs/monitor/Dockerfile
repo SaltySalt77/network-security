@@ -1,7 +1,5 @@
-# Kali Linux 기반 이미지 사용
 FROM kalilinux/kali-rolling
 
-# 패키지 업데이트 및 설치
 RUN apt update && \
     apt install -y hping3 && \
     apt install -y iputils-ping && \
@@ -10,5 +8,4 @@ RUN apt update && \
     apt install -y tshark && \
     apt clean
 
-# 기본 명령을 sleep으로 설정하여 컨테이너 유지
-CMD ["sleep", "infinity"]
+CMD ["sh", "-c", "echo 1 > /proc/sys/net/ipv4/ip_forward && sleep infinity"]

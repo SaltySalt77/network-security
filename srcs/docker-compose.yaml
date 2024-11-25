@@ -1,37 +1,50 @@
-version: "3"
+version: "3.8"
 
 services:
   target-server:
     image: nginx:latest
     container_name: target-server
     networks:
-      - isolated_ddos_net
+      isolated_ddos_net:
+        ipv4_address: 192.168.1.10
     ports:
       - "8080:80"
 
   attacker1:
-    build: .
+    build:
+      context: ./attacker
+      dockerfile: Dockerfile
     container_name: attacker1
     networks:
-      - isolated_ddos_net
+      isolated_ddos_net:
+        ipv4_address: 192.168.1.20
 
   attacker2:
-    build: .
+    build:
+      context: ./attacker
+      dockerfile: Dockerfile
     container_name: attacker2
     networks:
-      - isolated_ddos_net
+      isolated_ddos_net:
+        ipv4_address: 192.168.1.21
 
   attacker3:
-    build: .
+    build:
+      context: ./attacker
+      dockerfile: Dockerfile
     container_name: attacker3
     networks:
-      - isolated_ddos_net
+      isolated_ddos_net:
+        ipv4_address: 192.168.1.22
 
   monitor:
-    build: .
+    build:
+      context: ./monitor
+      dockerfile: Dockerfile
     container_name: monitor
     networks:
-      - isolated_ddos_net
+      isolated_ddos_net:
+        ipv4_address: 192.168.1.5
     ports:
       - "9000:9000"
     cap_add:
@@ -41,3 +54,6 @@ services:
 networks:
   isolated_ddos_net:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
